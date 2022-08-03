@@ -5,6 +5,8 @@
 
 #define PIN_RS 2
 #define PIN_E  3
+#define M1 A4
+#define M2 A5
 
 LiquidCrystal lcd(PIN_RS, PIN_E, 4, 5, 6, 7);
 
@@ -26,6 +28,8 @@ long operando1 = 0;
 long operando2 = 0;
 int flagOp1 = 1;
 int flagOp2 = 1;
+int flagRes = 1;
+long numeroM = 0;
 
 /*	    
     #: " = "
@@ -65,6 +69,7 @@ void Calculador()
     operando2 = segundoOperando();
     resultado = operando1 + operando2;
   	imprimirCalculo(resultado);
+    flagRes = 0;
     operando1 = 0;
     operando2 = 0;
     break;
@@ -75,6 +80,7 @@ void Calculador()
     operando2 = segundoOperando();
     resultado = operando1 - operando2;
   	imprimirCalculo(resultado);
+    flagRes = 0;
     operando1 = 0;
     operando2 = 0;
     break;
@@ -85,6 +91,7 @@ void Calculador()
     operando2 = segundoOperando();
     resultado = operando1 * operando2;
   	imprimirCalculo(resultado);
+    flagRes = 0;
     operando1 = 0;
     operando2 = 0;
     break;
@@ -95,11 +102,19 @@ void Calculador()
     operando2 = segundoOperando();
     resultado = (operando2 > 0 ? operando1 / operando2 : 0);
   	imprimirCalculo(resultado);
+    flagRes = 0;
     operando1 = 0;
     operando2 = 0;
     break;
   }
-
+  
+  if(analogRead(M2) && flagRes == 1){
+    imprimirCalculo(numeroM);
+  }
+  else if(analogRead(M2) && flagRes != 1){
+    numeroM = resultado;
+    imprimirCalculo(numeroM);
+  }
 }
 
 void loop()
